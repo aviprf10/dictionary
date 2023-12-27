@@ -1,45 +1,45 @@
+// ChatApp.js
 import React, { useState } from 'react';
+import ChatInput from './ChatInput';
+import ChatMessage from './ChatMessage';
 
-const XDictionary = () => {
-  const initialDictionary = [
-    { word: 'React', meaning: 'A JavaScript library for building user interfaces.' },
-    { word: 'Component', meaning: 'A reusable building block in React.' },
-    { word: 'State', meaning: 'An object that stores data for a component.' },
-  ];
+const user_list = ["Alan", "Bob", "Carol", "Dean", "Elin"];
 
-  const [dictionary, setDictionary] = useState(initialDictionary);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchResult, setSearchResult] = useState(null);
+const ChatApp = () => {
+  const [messages, setMessages] = useState([]);
 
-  const handleSearch = () => {
-    const lowerCaseSearchTerm = searchTerm.toLowerCase();
-    const result = dictionary.find(
-      (entry) => entry.word.toLowerCase() === lowerCaseSearchTerm
-    );
+  const handleSendMessage = (message) => {
+    const randomUser = user_list[Math.floor(Math.random() * user_list.length)];
+    const newMessage = {
+      user: randomUser,
+      content: message,
+      likes: 0,
+    };
+    setMessages([...messages, newMessage]);
+  };
 
-    setSearchResult(result);
+  const handleLikeClick = (index) => {
+    const updatedMessages = [...messages];
+    updatedMessages[index].likes += 1;
+    setMessages(updatedMessages);
   };
 
   return (
     <div>
-      <input
-        type="text"
-        placeholder="Enter search term"
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <button onClick={handleSearch}>Search</button>
-
-      {searchResult ? (
-        <div>
-          <h3>{searchResult.word}</h3>
-          <p>{searchResult.meaning}</p>
-        </div>
-      ) : (
-        <p>{searchTerm ? 'Word not found in the dictionary.' : ''}</p>
-      )}
+      <div>
+        {messages.map((message, index) => (
+          <ChatMessage
+            key={index}
+            user={message.user}
+            content={message.content}
+            likes={message.likes}
+            onLikeClick={() => handleLikeClick(index)}
+          />
+        ))}
+      </div>
+      <ChatInput onSendMessage={handleSendMessage} />
     </div>
   );
 };
 
-export default XDictionary;
+export default ChatApp;
