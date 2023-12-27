@@ -1,35 +1,27 @@
 import React, { useState } from 'react';
 
-const App = () => {
+const XDictionary = () => {
   const initialDictionary = [
-    { term: 'React', definition: 'A JavaScript library for building user interfaces' },
-    { term: 'Node.js', definition: 'A JavaScript runtime built on Chrome\'s V8 JavaScript engine' },
-    // Add more words and their meanings to the dictionary
+    { word: 'React', meaning: 'A JavaScript library for building user interfaces.' },
+    { word: 'Component', meaning: 'A reusable building block in React.' },
+    { word: 'State', meaning: 'An object that stores data for a component.' },
   ];
 
   const [dictionary, setDictionary] = useState(initialDictionary);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResult, setSearchResult] = useState(null);
-  const [searchMessage, setSearchMessage] = useState('');
 
   const handleSearch = () => {
-    // Implement search logic here
+    const lowerCaseSearchTerm = searchTerm.toLowerCase();
     const result = dictionary.find(
-      (entry) => entry.term.toLowerCase() === searchTerm.toLowerCase()
+      (entry) => entry.word.toLowerCase() === lowerCaseSearchTerm
     );
 
-    // Update the search result and message state
     setSearchResult(result);
-
-    if (result) {
-      setSearchMessage('');
-    } else {
-      setSearchMessage('Word not found in the dictionary.');
-    }
   };
 
   return (
-    <div className="App">
+    <div>
       <input
         type="text"
         placeholder="Enter search term"
@@ -38,16 +30,16 @@ const App = () => {
       />
       <button onClick={handleSearch}>Search</button>
 
-      {searchResult && (
+      {searchResult ? (
         <div>
-          <h3>{searchResult.term}</h3>
-          <p>{searchResult.definition}</p>
+          <h3>{searchResult.word}</h3>
+          <p>{searchResult.meaning}</p>
         </div>
+      ) : (
+        <p>{searchTerm ? 'Word not found in the dictionary.' : ''}</p>
       )}
-
-      {searchMessage && <p>{searchMessage}</p>}
     </div>
   );
 };
 
-export default App;
+export default XDictionary;
