@@ -1,45 +1,41 @@
-// ChatApp.js
 import React, { useState } from 'react';
-import ChatInput from './ChatInput';
-import ChatMessage from './ChatMessage';
 
-const user_list = ["Alan", "Bob", "Carol", "Dean", "Elin"];
+const XDictionary = () => {
+  const initialDictionary = [
+    { word: 'React', meaning: 'A JavaScript library for building user interfaces.' },
+    { word: 'Component', meaning: 'A reusable building block in React.' },
+    { word: 'State', meaning: 'An object that stores data for a component.' },
+  ];
 
-const ChatApp = () => {
-  const [messages, setMessages] = useState([]);
+  const [dictionary, setDictionary] = useState(initialDictionary);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResult, setSearchResult] = useState('');
 
-  const handleSendMessage = (message) => {
-    const randomUser = user_list[Math.floor(Math.random() * user_list.length)];
-    const newMessage = {
-      user: randomUser,
-      content: message,
-      likes: 0,
-    };
-    setMessages([...messages, newMessage]);
-  };
+  const handleSearch = () => {
+    const lowercaseSearchTerm = searchTerm.toLowerCase();
+    const foundWord = dictionary.find(
+      (entry) => entry.word.toLowerCase() === lowercaseSearchTerm
+    );
 
-  const handleLikeClick = (index) => {
-    const updatedMessages = [...messages];
-    updatedMessages[index].likes += 1;
-    setMessages(updatedMessages);
+    if (foundWord) {
+      setSearchResult(foundWord.meaning);
+    } else {
+      setSearchResult('Word not found in the dictionary.');
+    }
   };
 
   return (
     <div>
-      <div>
-        {messages.map((message, index) => (
-          <ChatMessage
-            key={index}
-            user={message.user}
-            content={message.content}
-            likes={message.likes}
-            onLikeClick={() => handleLikeClick(index)}
-          />
-        ))}
-      </div>
-      <ChatInput onSendMessage={handleSendMessage} />
+      <input
+        type="text"
+        placeholder="Enter search term..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <button onClick={handleSearch}>Search</button>
+      {searchResult && <p>{searchResult}</p>}
     </div>
   );
 };
 
-export default ChatApp;
+export default XDictionary;
