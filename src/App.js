@@ -37,5 +37,5 @@ const XDictionary = () => {
     </div>
   );
 };
-
+   
 export default XDictionary;
